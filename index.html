@@ -14,14 +14,17 @@
 
     <style>
         :root {
-            --brand-teal: #14b8a6;
-            --soft-bg: #fbfaf8;
+            --brand-primary: #1e293b;
+            --brand-secondary: #334155;
+            --brand-accent: #0f172a;
+            --brand-glow: #38bdf8;
+            --soft-bg: #020617;
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--soft-bg);
-            color: #1d1d1b;
+            color: #f1f5f9;
             overflow-x: hidden;
         }
 
@@ -29,426 +32,365 @@
             font-family: 'Source Serif 4', serif;
         }
 
-        #navbar {
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .hero-video-container {
-            position: absolute;
+        /* --- GRADIENTES EN MOVIMIENTO PERPETUO --- */
+        .gradient-bg {
+            position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
         }
 
-        .hero-video-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .blob {
+            position: absolute;
+            width: 70vmax;
+            height: 70vmax;
+            filter: blur(140px);
+            border-radius: 50%;
+            opacity: 0.25;
+            mix-blend-mode: plus-lighter;
+            animation: move 40s infinite alternate ease-in-out;
+        }
+
+        .blob-1 { background: #1e3a8a; top: -20%; left: -10%; animation-duration: 50s; }
+        .blob-2 { background: #0f172a; bottom: -20%; right: -10%; animation-duration: 45s; animation-delay: -5s; }
+        .blob-3 { background: #334155; top: 30%; left: 20%; width: 50vmax; height: 50vmax; animation-duration: 60s; animation-delay: -15s; }
+
+        @keyframes move {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            50% { transform: translate(15%, 10%) scale(1.1) rotate(90deg); }
+            100% { transform: translate(-5%, 20%) scale(1) rotate(180deg); }
+        }
+
+        /* --- ESTILOS DE COMPONENTES --- */
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .bento-card {
-            background: white;
-            border: 1px solid rgba(0,0,0,0.03);
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-            overflow: hidden;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.5s ease;
         }
 
-        .bento-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+        /* Scroll Horizontal Personalizado */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Stacking Cards */
+        .stacking-card {
+            position: sticky;
+            top: 15vh;
         }
 
-        /* Onboarding General Styles */
+        /* Marquee */
+        .marquee-inner { display: flex; width: fit-content; animation: marquee 60s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #1e3a8a, #38bdf8); width: 0%; }
+        
         .step-content {
             opacity: 0;
-            transform: translateY(50px);
+            transform: translateY(30px);
             position: absolute;
             width: 100%;
             pointer-events: none;
         }
-
-        .progress-bar-container {
-            height: 6px;
-            background: rgba(20, 184, 166, 0.1);
-            width: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background: var(--brand-teal);
-            width: 0%;
-        }
-
-        /* Marquee */
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        .marquee-inner {
-            display: flex;
-            width: fit-content;
-            animation: marquee 30s linear infinite;
-        }
-
-        /* Testimonios Grid */
-        .testimonial-card {
-            break-inside: avoid;
-            margin-bottom: 1.5rem;
-        }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--soft-bg); }
-        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--brand-teal); }
     </style>
 </head>
 <body class="antialiased">
 
-    <!-- Navegación -->
-    <nav id="navbar" class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-6xl z-[100] py-3 px-8 flex justify-between items-center rounded-full border border-white/20 backdrop-blur-lg bg-white/5 shadow-xl">
+    <div class="gradient-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- 1. Header -->
+    <nav id="navbar" class="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-[100] py-4 px-8 flex justify-between items-center rounded-full border border-white/5 backdrop-blur-2xl bg-white/5 shadow-2xl transition-all duration-500">
         <div class="flex items-center gap-2">
-            <span class="serif text-xl md:text-2xl font-bold text-white tracking-tight" id="nav-logo">
-                Site Brand<span class="text-teal-400">.agency</span>
+            <span class="serif text-xl md:text-2xl font-bold text-white tracking-tight">
+                Site Brand<span class="text-sky-400">.agency</span>
             </span>
         </div>
-        
-        <div class="hidden md:flex gap-10 items-center text-xs font-bold uppercase tracking-widest text-white/70" id="nav-links">
-            <a href="#ingenieria" class="hover:text-teal-400 transition-all">Ingeniería</a>
-            <a href="#metodologia" class="hover:text-teal-400 transition-all">Onboarding</a>
-            <a href="#equipo" class="hover:text-teal-400 transition-all">Equipo</a>
-            <a href="#opiniones" class="hover:text-teal-400 transition-all">Opiniones</a>
-            <button class="bg-white text-slate-900 px-6 py-2.5 rounded-full hover:bg-teal-500 hover:text-white transition-all transform hover:scale-105">
-                Contactar
-            </button>
+        <div class="hidden lg:flex gap-10 items-center text-[10px] font-bold uppercase tracking-[0.2em] text-white/50">
+            <a href="#" class="hover:text-sky-400 transition-colors">Inicio</a>
+            <a href="#resultados" class="hover:text-sky-400 transition-colors">Resultados</a>
+            <a href="#servicios" class="hover:text-sky-400 transition-colors">Servicios</a>
+            <a href="#testimonios" class="hover:text-sky-400 transition-colors">Opiniones</a>
+            <button class="bg-white text-slate-950 px-7 py-3 rounded-full hover:bg-sky-400 hover:scale-105 transition-all font-bold uppercase tracking-tighter">Agenda Auditoría</button>
         </div>
-
-        <button id="menu-toggle" class="md:hidden text-white p-2">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
     </nav>
 
-    <!-- Hero -->
-    <section class="relative h-[100svh] flex items-center justify-center overflow-hidden">
-        <div class="hero-video-container">
-            <video autoplay muted loop playsinline class="brightness-[0.45]">
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-business-people-working-in-the-office-and-meeting-958-large.mp4" type="video/mp4">
-            </video>
-            <div class="absolute inset-0 bg-gradient-to-b from-slate-950/40 via-transparent to-slate-950/80"></div>
-        </div>
-
+    <!-- 2. Hero Section -->
+    <section class="relative h-[100vh] flex items-center justify-center overflow-hidden">
         <div class="relative z-10 text-center px-6 max-w-5xl" id="hero-content">
-            <span class="inline-block text-teal-400 font-bold tracking-[0.3em] uppercase text-[10px] mb-6 border border-teal-400/30 px-4 py-1 rounded-full bg-teal-400/10">
-                Sistemas Digitales de Alto Rendimiento
-            </span>
-            <h1 class="text-5xl md:text-8xl text-white font-normal leading-[1.1] mb-8 tracking-tighter">
-                Diseñamos el <span class="serif italic text-teal-400">estándar</span> <br> de tu industria.
+            <h1 class="text-5xl md:text-8xl text-white font-normal leading-[1.05] mb-8 tracking-tighter">
+                Diseño que genera <span class="serif italic text-sky-400/80">autoridad</span> y resultados reales.
             </h1>
-            <p class="text-lg md:text-2xl text-slate-300 max-w-2xl mx-auto mb-10 font-light leading-relaxed">
-                Ingeniería web premium para marcas que no aceptan menos que la perfección.
+            <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-12 font-light leading-relaxed">
+                Combinamos ingeniería de software con diseño estratégico para marcas que buscan el siguiente nivel de sofisticación.
             </p>
             <div class="flex flex-col sm:flex-row gap-5 justify-center">
-                <a href="#metodologia" class="bg-teal-500 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-teal-400 transition-all shadow-2xl">
-                    Ver Proceso
-                </a>
-                <a href="#opiniones" class="bg-white/10 backdrop-blur-md border border-white/20 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-white/20 transition-all">
-                    Testimonios
+                <a href="#contacto" class="bg-sky-600 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-sky-500 transition-all shadow-xl shadow-sky-900/20">
+                    Empezar Proyecto
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Social Proof Marquee -->
-    <section class="py-12 bg-white border-b border-slate-100 overflow-hidden">
-        <div class="marquee-inner">
-            <div class="flex items-center gap-16 px-8 text-slate-400 font-bold text-2xl serif italic opacity-40">
-                <span>SMA ODONTOLOGÍA</span><span>MATATAN BARBER</span><span>ELITE SPA</span><span>COACH BASEBALL</span><span>FERREMAX</span><span>ESSENCE</span><span>AURORA</span>
+    <!-- 3. SECCIÓN: Resultados (Scroll Horizontal) -->
+    <section id="resultados" class="py-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 mb-16">
+            <span class="text-sky-500 font-bold tracking-[0.3em] text-[10px] uppercase">Impacto Medible</span>
+            <h2 class="text-5xl md:text-7xl serif italic tracking-tighter text-white mt-4">Nuestros Resultados.</h2>
+        </div>
+        
+        <div class="flex overflow-x-auto gap-8 px-6 md:px-[calc(50vw-600px)] pb-12 hide-scrollbar snap-x cursor-grab active:cursor-grabbing" id="horizontal-scroll">
+            <!-- Resultado 1 -->
+            <div class="min-w-[320px] md:min-w-[450px] snap-center bento-card p-12 rounded-[48px] border-white/5">
+                <div class="text-sky-400 serif text-6xl mb-6 font-bold tracking-tighter">+120%</div>
+                <h4 class="text-white text-xl font-bold mb-4">Conversión Web</h4>
+                <p class="text-slate-500 text-sm leading-relaxed">Incremento en ventas directas para el sector salud tras rediseño de embudo estratégico.</p>
             </div>
-            <div class="flex items-center gap-16 px-8 text-slate-400 font-bold text-2xl serif italic opacity-40">
-                <span>SMA ODONTOLOGÍA</span><span>MATATAN BARBER</span><span>ELITE SPA</span><span>COACH BASEBALL</span><span>FERREMAX</span><span>ESSENCE</span><span>AURORA</span>
+            <!-- Resultado 2 -->
+            <div class="min-w-[320px] md:min-w-[450px] snap-center bento-card p-12 rounded-[48px] border-white/5">
+                <div class="text-sky-400 serif text-6xl mb-6 font-bold tracking-tighter">0.8s</div>
+                <h4 class="text-white text-xl font-bold mb-4">Velocidad de Carga</h4>
+                <p class="text-slate-500 text-sm leading-relaxed">Optimización técnica extrema que redujo el rebote global en un 45%.</p>
+            </div>
+            <!-- Resultado 3 -->
+            <div class="min-w-[320px] md:min-w-[450px] snap-center bento-card p-12 rounded-[48px] border-white/5">
+                <div class="text-sky-400 serif text-6xl mb-6 font-bold tracking-tighter">4.5M</div>
+                <h4 class="text-white text-xl font-bold mb-4">Alcance Orgánico</h4>
+                <p class="text-slate-500 text-sm leading-relaxed">Impacto visual premium que generó viralidad natural para marca de retail.</p>
+            </div>
+            <!-- Resultado 4 -->
+            <div class="min-w-[320px] md:min-w-[450px] snap-center bento-card p-12 rounded-[48px] border-white/5">
+                <div class="text-sky-400 serif text-6xl mb-6 font-bold tracking-tighter">+85%</div>
+                <h4 class="text-white text-xl font-bold mb-4">Retención UX</h4>
+                <p class="text-slate-500 text-sm leading-relaxed">Mejora drástica en la experiencia de usuario para aplicaciones SaaS complejas.</p>
+            </div>
+            <!-- Resultado 5 -->
+            <div class="min-w-[320px] md:min-w-[450px] snap-center bento-card p-12 rounded-[48px] border-white/5">
+                <div class="text-sky-400 serif text-6xl mb-6 font-bold tracking-tighter">15k</div>
+                <h4 class="text-white text-xl font-bold mb-4">Leads Mensuales</h4>
+                <p class="text-slate-500 text-sm leading-relaxed">Automatización de captación para servicios profesionales B2B de alto ticket.</p>
+            </div>
+            <!-- Resultado 6 -->
+            <div class="min-w-[320px] md:min-w-[450px] snap-center bento-card p-12 rounded-[48px] border-white/5">
+                <div class="text-sky-400 serif text-6xl mb-6 font-bold tracking-tighter">100%</div>
+                <h4 class="text-white text-xl font-bold mb-4">Escalabilidad</h4>
+                <p class="text-slate-500 text-sm leading-relaxed">Sistemas en la nube preparados para picos de tráfico sin interrupciones.</p>
             </div>
         </div>
     </section>
 
-    <!-- Onboarding Automático -->
-    <section id="metodologia" class="relative bg-white overflow-hidden">
-        <div class="progress-bar-container z-50">
+    <!-- 4. SECCIÓN: Testimonios (Stacking Cards) -->
+    <section id="testimonios" class="py-32 px-6">
+        <div class="max-w-4xl mx-auto mb-20 text-center">
+            <span class="text-sky-500 font-bold tracking-[0.3em] text-[10px] uppercase">Voces de Confianza</span>
+            <h2 class="text-5xl md:text-7xl serif italic tracking-tighter text-white mt-4">Opiniones.</h2>
+        </div>
+
+        <div class="max-w-3xl mx-auto space-y-[15vh] pb-[20vh]">
+            <!-- Card 1 -->
+            <div class="stacking-card glass p-10 md:p-16 rounded-[48px] shadow-2xl border-white/10">
+                <div class="flex gap-1 mb-8">
+                    <span class="text-sky-400 text-xl tracking-tighter font-bold">★★★★★</span>
+                </div>
+                <p class="text-xl md:text-3xl text-white font-light leading-relaxed mb-10 italic">"El nivel de detalle y la seriedad con la que manejan el código es algo que no habíamos visto antes. Nuestra web ahora proyecta la calma y confianza que buscábamos."</p>
+                <div class="flex items-center gap-5">
+                    <div class="w-14 h-14 rounded-full bg-sky-900/40 border border-sky-400/30 flex items-center justify-center font-bold text-sky-400">JD</div>
+                    <div>
+                        <div class="font-bold text-white text-lg">Javier Domínguez</div>
+                        <div class="text-xs text-slate-500 uppercase tracking-widest">CEO, Elite Spa</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="stacking-card glass p-10 md:p-16 rounded-[48px] shadow-2xl border-white/10 bg-slate-900/40">
+                <div class="flex gap-1 mb-8">
+                    <span class="text-sky-400 text-xl tracking-tighter font-bold">★★★★★</span>
+                </div>
+                <p class="text-xl md:text-3xl text-white font-light leading-relaxed mb-10 italic">"Lograron transformar un portal obsoleto en una herramienta de ventas potente. El diseño es simplemente hipnótico y funcional."</p>
+                <div class="flex items-center gap-5">
+                    <div class="w-14 h-14 rounded-full bg-sky-900/40 border border-sky-400/30 flex items-center justify-center font-bold text-sky-400">MA</div>
+                    <div>
+                        <div class="font-bold text-white text-lg">María Arrieta</div>
+                        <div class="text-xs text-slate-500 uppercase tracking-widest">Marketing Director, Aurora</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="stacking-card glass p-10 md:p-16 rounded-[48px] shadow-2xl border-white/10 bg-slate-950/60">
+                <div class="flex gap-1 mb-8">
+                    <span class="text-sky-400 text-xl tracking-tighter font-bold">★★★★★</span>
+                </div>
+                <p class="text-xl md:text-3xl text-white font-light leading-relaxed mb-10 italic">"Un diseño muy serio y minimalista. Los espacios negativos que usan realmente ayudan a que el contenido respire y el cliente se sienta cómodo."</p>
+                <div class="flex items-center gap-5">
+                    <div class="w-14 h-14 rounded-full bg-sky-900/40 border border-sky-400/30 flex items-center justify-center font-bold text-sky-400">RC</div>
+                    <div>
+                        <div class="font-bold text-white text-lg">Roberto Carlos</div>
+                        <div class="text-xs text-slate-500 uppercase tracking-widest">Fundador, Matatán Barber</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="stacking-card glass p-10 md:p-16 rounded-[48px] shadow-2xl border-white/10 bg-slate-900/80">
+                <div class="flex gap-1 mb-8">
+                    <span class="text-sky-400 text-xl tracking-tighter font-bold">★★★★★</span>
+                </div>
+                <p class="text-xl md:text-3xl text-white font-light leading-relaxed mb-10 italic">"Superaron mis expectativas. El proceso es transparente y la atención al detalle en los gradientes móviles es impecable."</p>
+                <div class="flex items-center gap-5">
+                    <div class="w-14 h-14 rounded-full bg-sky-900/40 border border-sky-400/30 flex items-center justify-center font-bold text-sky-400">SL</div>
+                    <div>
+                        <div class="font-bold text-white text-lg">Sofía Luna</div>
+                        <div class="text-xs text-slate-500 uppercase tracking-widest">Product Manager, Essence</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="stacking-card glass p-10 md:p-16 rounded-[48px] shadow-2xl border-white/10 bg-black/40">
+                <div class="flex gap-1 mb-8">
+                    <span class="text-sky-400 text-xl tracking-tighter font-bold">★★★★★</span>
+                </div>
+                <p class="text-xl md:text-3xl text-white font-light leading-relaxed mb-10 italic">"Finalmente una agencia que entiende que el diseño no es solo verse bien, sino convertir visitas en facturación real."</p>
+                <div class="flex items-center gap-5">
+                    <div class="w-14 h-14 rounded-full bg-sky-900/40 border border-sky-400/30 flex items-center justify-center font-bold text-sky-400">FG</div>
+                    <div>
+                        <div class="font-bold text-white text-lg">Fernando G.</div>
+                        <div class="text-xs text-slate-500 uppercase tracking-widest">Dueño, Ferremax</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. El Proceso -->
+    <section id="proceso" class="relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-px bg-white/5 z-50">
             <div class="progress-bar-fill" id="onboarding-progress"></div>
         </div>
         <div class="max-w-7xl mx-auto px-6 h-screen flex flex-col justify-center items-center relative">
             <div class="step-content text-center flex flex-col items-center" id="step-1">
-                <h3 class="text-4xl md:text-7xl font-normal tracking-tighter mb-6">01. Descubrimiento</h3>
-                <p class="text-xl text-slate-500 max-w-xl">Entendemos tu modelo de negocio antes de tocar una sola línea de código.</p>
+                <span class="text-sky-500 font-bold mb-4 tracking-[0.3em] text-[10px]">01 ESTRATEGIA</span>
+                <h3 class="text-5xl md:text-8xl font-normal mb-6 tracking-tighter">Investigación</h3>
+                <p class="text-lg text-slate-500 max-w-xl">Analizamos datos para fundamentar cada decisión de diseño.</p>
             </div>
-            <div class="step-content text-center flex flex-col items-center" id="step-2">
-                <h3 class="text-4xl md:text-7xl font-normal tracking-tighter mb-6">02. Diseño de Interfaz</h3>
-                <p class="text-xl text-slate-500 max-w-xl">Arquitectura visual diseñada para guiar al usuario hacia la conversión de forma orgánica.</p>
-            </div>
-            <div class="step-content text-center flex flex-col items-center" id="step-3">
-                <h3 class="text-4xl md:text-7xl font-normal tracking-tighter mb-6">03. Despliegue Cloud</h3>
-                <p class="text-xl text-slate-500 max-w-xl">Lanzamiento en infraestructura cloud con redundancia y velocidad de carga global.</p>
+            <div class="step-content text-center flex flex-col items-center opacity-0" id="step-2">
+                <span class="text-sky-500 font-bold mb-4 tracking-[0.3em] text-[10px]">02 CREATIVIDAD</span>
+                <h3 class="text-5xl md:text-8xl font-normal mb-6 tracking-tighter">Prototipado</h3>
+                <p class="text-lg text-slate-500 max-w-xl">Iteraciones rápidas para encontrar la solución visual perfecta.</p>
             </div>
         </div>
     </section>
 
-    <!-- Sección: Nuestra Ingeniería -->
-    <section id="ingenieria" class="py-32 px-6 bg-slate-950 text-white reveal-section">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+    <!-- Contacto -->
+    <section id="contacto" class="py-32 px-6">
+        <div class="max-w-5xl mx-auto glass rounded-[60px] p-12 md:p-20 relative overflow-hidden">
+            <div class="relative z-10 grid md:grid-cols-2 gap-20 items-center">
                 <div>
-                    <h2 class="text-4xl md:text-6xl serif italic text-teal-400 mb-8">Ingeniería que <br> respira velocidad.</h2>
-                    <p class="text-slate-400 text-lg mb-12 leading-relaxed">No usamos plantillas. Construimos sistemas escalables utilizando tecnologías modernas para garantizar que tu sitio sea el más rápido de tu competencia.</p>
-                    <div class="space-y-6">
-                        <div class="flex items-center gap-4">
-                            <div class="w-2 h-2 rounded-full bg-teal-500"></div>
-                            <span class="font-bold tracking-widest text-xs uppercase">Carga instantánea < 1.2s</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="w-2 h-2 rounded-full bg-teal-500"></div>
-                            <span class="font-bold tracking-widest text-xs uppercase">Seguridad de grado bancario</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="w-2 h-2 rounded-full bg-teal-500"></div>
-                            <span class="font-bold tracking-widest text-xs uppercase">SEO Técnico integrado</span>
-                        </div>
-                    </div>
+                    <h2 class="text-4xl md:text-5xl font-normal mb-8 tracking-tighter">Construyamos algo <span class="serif italic text-sky-400">superior</span>.</h2>
+                    <p class="text-slate-500 mb-10 text-sm leading-relaxed">Agenda una sesión de consultoría técnica sin compromiso.</p>
+                    <button class="bg-sky-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-sky-500 transition-all">Programar Llamada</button>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="h-64 bg-slate-900 rounded-3xl p-8 flex flex-col justify-end border border-white/5">
-                        <span class="text-4xl font-bold text-teal-500">99</span>
-                        <span class="text-[10px] uppercase text-white/40 tracking-widest">Page Speed</span>
-                    </div>
-                    <div class="h-64 bg-slate-900 rounded-3xl p-8 flex flex-col justify-end border border-white/5 mt-10">
-                        <span class="text-4xl font-bold text-teal-500">100%</span>
-                        <span class="text-[10px] uppercase text-white/40 tracking-widest">Uptime</span>
-                    </div>
-                </div>
+                <form class="space-y-4">
+                    <input type="text" placeholder="Nombre" class="w-full p-5 bg-white/5 rounded-2xl border border-white/5 outline-none text-white focus:border-sky-500 transition-all">
+                    <input type="email" placeholder="Email" class="w-full p-5 bg-white/5 rounded-2xl border border-white/5 outline-none text-white focus:border-sky-500 transition-all">
+                    <button class="w-full bg-white text-slate-900 py-5 rounded-2xl font-bold hover:bg-sky-400 transition-all">Enviar Solicitud</button>
+                </form>
             </div>
         </div>
     </section>
 
-    <!-- Sección: Equipo -->
-    <section id="equipo" class="py-32 px-6 bg-white reveal-section">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-20">
-                <h2 class="text-5xl md:text-7xl serif italic mb-4">Mentes tras la marca.</h2>
-                <p class="text-slate-500">Un equipo multidisciplinar obsesionado con el detalle técnico.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                <!-- Miembro 1 -->
-                <div class="text-center group">
-                    <div class="w-48 h-48 mx-auto rounded-full bg-slate-100 overflow-hidden mb-6 relative border-4 border-white shadow-lg">
-                        <img src="https://i.pravatar.cc/300?u=alejandro" alt="Director Creativo" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                    </div>
-                    <h4 class="text-2xl font-bold">Alejandro V.</h4>
-                    <p class="text-teal-600 text-sm font-bold uppercase tracking-widest mb-4">Director Creativo</p>
-                    <p class="text-slate-500 italic text-sm px-6">"Cada pixel debe cumplir un objetivo de negocio. No diseñamos arte, diseñamos resultados."</p>
-                </div>
-                <!-- Miembro 2 -->
-                <div class="text-center group">
-                    <div class="w-48 h-48 mx-auto rounded-full bg-slate-100 overflow-hidden mb-6 relative border-4 border-white shadow-lg">
-                        <img src="https://i.pravatar.cc/300?u=elena" alt="Ingeniera Principal" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                    </div>
-                    <h4 class="text-2xl font-bold">Elena R.</h4>
-                    <p class="text-teal-600 text-sm font-bold uppercase tracking-widest mb-4">Lead Engineer</p>
-                    <p class="text-slate-500 italic text-sm px-6">"La optimización no es un paso extra, es la base de nuestra arquitectura de código."</p>
-                </div>
-                <!-- Miembro 3 -->
-                <div class="text-center group">
-                    <div class="w-48 h-48 mx-auto rounded-full bg-slate-100 overflow-hidden mb-6 relative border-4 border-white shadow-lg">
-                        <img src="https://i.pravatar.cc/300?u=marcos" alt="Estratega" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                    </div>
-                    <h4 class="text-2xl font-bold">Marcos S.</h4>
-                    <p class="text-teal-600 text-sm font-bold uppercase tracking-widest mb-4">Estratega Digital</p>
-                    <p class="text-slate-500 italic text-sm px-6">"Convertimos visitantes en clientes recurrentes mediante automatización inteligente."</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sección: Testimonios de 5 Estrellas -->
-    <section id="opiniones" class="py-32 px-6 bg-slate-50 reveal-section">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl md:text-7xl serif italic mb-20 text-center">Opiniones de <span class="text-teal-600">5 Estrellas.</span></h2>
-            
-            <div class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-                <!-- Odontología -->
-                <div class="testimonial-card p-8 bg-white rounded-[40px] shadow-sm border border-slate-100">
-                    <div class="flex text-teal-400 mb-4">★★★★★</div>
-                    <p class="text-slate-600 mb-6 italic">"Automatizamos nuestra agenda de citas. SMA Odontología creció un 40% en un mes."</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center font-bold text-teal-600 text-xs">SMA</div>
-                        <div>
-                            <div class="font-bold text-sm text-slate-900">Dr. Luis G.</div>
-                            <div class="text-[10px] uppercase text-slate-400 tracking-widest">SMA Odontología</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Barbería -->
-                <div class="testimonial-card p-8 bg-white rounded-[40px] shadow-sm border border-slate-100">
-                    <div class="flex text-teal-400 mb-4">★★★★★</div>
-                    <p class="text-slate-600 mb-6 italic">"Matatan Barber ahora tiene una imagen que intimida a la competencia. La web reserva cortes sola."</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center font-bold text-teal-600 text-xs">MB</div>
-                        <div>
-                            <div class="font-bold text-sm text-slate-900">Carlos "Matatan"</div>
-                            <div class="text-[10px] uppercase text-slate-400 tracking-widest">Matatan Barber</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SPA -->
-                <div class="testimonial-card p-8 bg-white rounded-[40px] shadow-sm border border-slate-100">
-                    <div class="flex text-teal-400 mb-4">★★★★★</div>
-                    <p class="text-slate-600 mb-6 italic">"Capturaron la esencia de nuestro SPA perfectamente. La navegación es pura relajación."</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center font-bold text-teal-600 text-xs">SPA</div>
-                        <div>
-                            <div class="font-bold text-sm text-slate-900">Laura M.</div>
-                            <div class="text-[10px] uppercase text-slate-400 tracking-widest">Elite SPA</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Coach Béisbol -->
-                <div class="testimonial-card p-8 bg-white rounded-[40px] shadow-sm border border-slate-100">
-                    <div class="flex text-teal-400 mb-4">★★★★★</div>
-                    <p class="text-slate-600 mb-6 italic">"Vender mis programas de entrenamiento online es ahora mucho más fácil. Gran trabajo estratégico."</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center font-bold text-teal-600 text-xs">CB</div>
-                        <div>
-                            <div class="font-bold text-sm text-slate-900">Coach Rivera</div>
-                            <div class="text-[10px] uppercase text-slate-400 tracking-widest">Coach de Béisbol Pro</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Escritor -->
-                <div class="testimonial-card p-8 bg-white rounded-[40px] shadow-sm border border-slate-100">
-                    <div class="flex text-teal-400 mb-4">★★★★★</div>
-                    <p class="text-slate-600 mb-6 italic">"Como escritor, mi sitio ahora refleja mi voz con un minimalismo literario perfecto."</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center font-bold text-teal-600 text-xs">JS</div>
-                        <div>
-                            <div class="font-bold text-sm text-slate-900">Javier S.</div>
-                            <div class="text-[10px] uppercase text-slate-400 tracking-widest">Escritor & Columnista</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Ferretería -->
-                <div class="testimonial-card p-8 bg-white rounded-[40px] shadow-sm border border-slate-100">
-                    <div class="flex text-teal-400 mb-4">★★★★★</div>
-                    <p class="text-slate-600 mb-6 italic">"Digitalizaron un catálogo de miles de productos sin perder velocidad. Impresionante."</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center font-bold text-teal-600 text-xs">FX</div>
-                        <div>
-                            <div class="font-bold text-sm text-slate-900">Ricardo P.</div>
-                            <div class="text-[10px] uppercase text-slate-400 tracking-widest">Ferretería Central</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-950 text-white pt-32 pb-16 px-6 rounded-t-[60px] reveal-section">
-        <div class="max-w-7xl mx-auto text-center">
-            <h2 class="text-6xl md:text-9xl serif font-normal mb-12 tracking-tighter">Site Brand<span class="text-teal-600">.</span></h2>
-            <div class="flex flex-wrap justify-center gap-8 mb-20 text-xs font-bold uppercase tracking-widest text-teal-500">
-                <a href="#ingenieria" class="hover:text-white transition-colors">Ingeniería</a>
-                <a href="#metodologia" class="hover:text-white transition-colors">Onboarding</a>
-                <a href="#equipo" class="hover:text-white transition-colors">Equipo</a>
-                <a href="#opiniones" class="hover:text-white transition-colors">Opiniones</a>
-            </div>
-            <div class="text-[10px] uppercase tracking-[0.5em] text-white/20">
-                © 2024 SITE BRAND AGENCY — THE NEW STANDARD
-            </div>
-        </div>
+    <footer class="py-20 px-6 border-t border-white/5 text-center">
+        <div class="serif italic text-2xl mb-8 opacity-80 text-white">Site Brand<span class="text-sky-500">.</span></div>
+        <p class="text-slate-600 text-[9px] tracking-[0.4em] uppercase">© 2024 — Ingeniería y Diseño de Clase Mundial</p>
     </footer>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // Lógica de Navegación Dinámica
+        // Navbar Animation
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
-            const logo = document.getElementById('nav-logo');
-            const links = document.getElementById('nav-links');
             if (window.scrollY > 50) {
-                nav.classList.add('bg-white/95', 'py-4', 'shadow-2xl', 'border-slate-100', 'top-4');
-                nav.classList.remove('bg-white/5', 'top-6', 'border-white/20');
-                logo.classList.replace('text-white', 'text-slate-900');
-                links.classList.replace('text-white/70', 'text-slate-600');
+                nav.classList.add('bg-black/80', 'py-3', 'shadow-2xl');
             } else {
-                nav.classList.remove('bg-white/95', 'py-4', 'shadow-2xl', 'border-slate-100', 'top-4');
-                nav.classList.add('bg-white/5', 'top-6', 'border-white/20');
-                logo.classList.replace('text-slate-900', 'text-white');
-                links.classList.replace('text-slate-600', 'text-white/70');
+                nav.classList.remove('bg-black/80', 'py-3', 'shadow-2xl');
             }
         });
 
-        // Animación Hero
-        gsap.from('#hero-content > *', {
-            y: 40,
-            opacity: 0,
-            duration: 1.2,
-            stagger: 0.2,
-            ease: "power4.out"
-        });
-
-        // Timeline del Onboarding Automático
-        const onboardingTL = gsap.timeline({
+        // Horizontal Scroll Animation para Resultados
+        const resultsContainer = document.getElementById('horizontal-scroll');
+        gsap.to(resultsContainer, {
             scrollTrigger: {
-                trigger: "#metodologia",
-                start: "top top",
-                end: "+=3000",
-                scrub: 1,
-                pin: true,
-                anticipatePin: 1
-            }
+                trigger: "#resultados",
+                start: "top 80%",
+                end: "bottom 20%",
+                scrub: 1.5,
+            },
+            x: -300,
+            duration: 1
         });
 
-        onboardingTL.to("#step-1", { opacity: 1, y: 0, duration: 1 })
-                    .to("#onboarding-progress", { width: "33.3%", duration: 1 }, "<")
-                    .to("#step-1", { opacity: 0, y: -50, duration: 1, delay: 1.5 })
-                    .to("#step-2", { opacity: 1, y: 0, duration: 1 })
-                    .to("#onboarding-progress", { width: "66.6%", duration: 1 }, "<")
-                    .to("#step-2", { opacity: 0, y: -50, duration: 1, delay: 1.5 })
-                    .to("#step-3", { opacity: 1, y: 0, duration: 1 })
-                    .to("#onboarding-progress", { width: "100%", duration: 1 }, "<");
-
-        // Revelado General de Secciones
-        gsap.utils.toArray('.reveal-section').forEach((section) => {
-            gsap.from(section, {
-                scrollTrigger: {
-                    trigger: section,
-                    start: "top 85%",
-                    toggleActions: "play none none none"
-                },
-                y: 50,
+        // Stacking Cards Logic (Opiniones)
+        const cards = gsap.utils.toArray('.stacking-card');
+        cards.forEach((card, i) => {
+            gsap.fromTo(card, {
+                scale: 0.9,
                 opacity: 0,
+                y: 100
+            }, {
+                scale: 1,
+                opacity: 1,
+                y: 0,
                 duration: 1.2,
-                ease: "power3.out"
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 90%",
+                    end: "top 25%",
+                    scrub: true
+                }
             });
         });
 
-        // Parallax del Video de Fondo
-        gsap.to(".hero-video-container video", {
-            yPercent: 30,
-            ease: "none",
+        // Proceso Timeline (Original)
+        const processTL = gsap.timeline({
             scrollTrigger: {
-                trigger: "section",
+                trigger: "#proceso",
                 start: "top top",
-                end: "bottom top",
-                scrub: true
+                end: "+=2000",
+                scrub: 1,
+                pin: true
             }
+        });
+
+        processTL.to("#step-1", { opacity: 1, y: 0, duration: 1 })
+                 .to("#onboarding-progress", { width: "50%", duration: 1 }, "<")
+                 .to("#step-1", { opacity: 0, y: -40, duration: 1, delay: 0.5 })
+                 .to("#step-2", { opacity: 1, y: 0, duration: 1 })
+                 .to("#onboarding-progress", { width: "100%", duration: 1 }, "<");
+
+        // Hero Content Stagger
+        gsap.from("#hero-content > *", {
+            y: 40,
+            opacity: 0,
+            duration: 1.5,
+            stagger: 0.2,
+            ease: "expo.out"
         });
     </script>
 </body>
